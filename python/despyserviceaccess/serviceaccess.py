@@ -47,9 +47,9 @@ def parse(file, section, tag=None, retry=False) :
     # to allow for automounting filesystems, retry on failures
     maxtries = 1
     if retry:
-        maxtries = 3
+        maxtries = 5
     trycnt = 0
-    delay = 1
+    delay = 30
     success = False
     exc = None
     while not success and trycnt <= maxtries:
