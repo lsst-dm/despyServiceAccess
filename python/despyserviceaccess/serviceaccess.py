@@ -16,6 +16,8 @@ Check supplies chaking of entries as specified in DESDM-3
 
 import os
 import sys
+import time
+import subprocess
 
 class ServiceaccessException(Exception):
     "class for any file-content, + null fle name"
@@ -29,7 +31,7 @@ class ServiceaccessException(Exception):
 expectedkeys = ("meta_section", "meta_file")
 expected_db_keys = ("user", "passwd", "type","port","server", "name", "sid", "meta_section", "meta_file")
 
-def parse(file, section, tag=None) :
+def parse(file, section, tag=None, retry=False) :
     """parse a serviceaccess file, return a dictionary of keys  section supplimented by defaults indicated by tag
 
     provide two extra dictionary entries, 
@@ -42,7 +44,38 @@ def parse(file, section, tag=None) :
 
     # config parser throws "no section error" if file does not exist....
     # ... That's Confusing. so do an open to get a more understandable error.
-    open(file) 
+    # to allow for automounting filesystems, retry on failures
+    maxtries = 1
+    if retry:
+        maxtries = 5
+    trycnt = 0
+    delay = 30
+    success = False
+    exc = None
+    while not success and trycnt <= maxtries:
+        trycnt += 1
+        try:
+            open(file) 
+            success = True
+        except IOError as exc:
+            if trycnt < maxtries:
+                print "IOError: %s" % exc
+                print "Sleeping for %s seconds and retrying" % delay 
+                try:
+                    # try triggering automount
+                    process = subprocess.Popen(['ls', '-l', file], shell=False,
+                                               stdout=subprocess.PIPE,
+                                               stderr=subprocess.STDOUT);
+                    process.wait()
+                    #print process.communicate()
+                except:
+                    pass
+                time.sleep(delay)
+    
+    if not success:
+        raise
+
+
     import ConfigParser
     c = ConfigParser.RawConfigParser()
     c.read(file)
