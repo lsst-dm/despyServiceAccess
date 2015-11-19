@@ -107,22 +107,22 @@ serverr = sevrver   ; example of mis-spelled keyword
         self.assertEqual(self.minimal["name"],   "Minimal_name")
         self.assertEqual(self.minimal["port"],   "1521")
 
-    def test_c_good_fetch(self):
-        """ test that a good file can be accessed from C  """
-        cmd = "./test_svc_parse %%s %s %s" % ("db-minimal", self.filename) 
-        self.assertEqual(getLinesFromShellCommand (cmd % "user")[0][0],   "Minimal_user")
-        self.assertEqual(getLinesFromShellCommand (cmd % "passwd")[0][0], "Minimal_passwd")
-        self.assertEqual(getLinesFromShellCommand (cmd % "type")[0][0],   "oracle")
-        self.assertEqual(getLinesFromShellCommand (cmd % "name")[0][0],   "Minimal_name")
-        self.assertEqual(getLinesFromShellCommand (cmd % "port")[0][0],   "1521")
-        return
+#    def test_c_good_fetch(self):
+#        """ test that a good file can be accessed from C  """
+#        cmd = "./test_svc_parse %%s %s %s" % ("db-minimal", self.filename) 
+#        self.assertEqual(getLinesFromShellCommand (cmd % "user")[0][0],   "Minimal_user")
+#        self.assertEqual(getLinesFromShellCommand (cmd % "passwd")[0][0], "Minimal_passwd")
+#        self.assertEqual(getLinesFromShellCommand (cmd % "type")[0][0],   "oracle")
+#        self.assertEqual(getLinesFromShellCommand (cmd % "name")[0][0],   "Minimal_name")
+#        self.assertEqual(getLinesFromShellCommand (cmd % "port")[0][0],   "1521")
+#        return
 
-    def test_C_section_via_env_good(self):
-        " test that the C API can obtain section from the environment"""
-        section = "db-minimal"
-        cmd = '(export DES_DB_SECTION=%s; ./test_svc_parse -C %s "" %s)' % (
-            section, "meta_section", self.filename) 
-        self.assertEqual(getLinesFromShellCommand (cmd)[0][0], section)
+#    def test_C_section_via_env_good(self):
+#        " test that the C API can obtain section from the environment"""
+#        section = "db-minimal"
+#        cmd = '(export DES_DB_SECTION=%s; ./test_svc_parse -C %s "" %s)' % (
+#            section, "meta_section", self.filename) 
+#        self.assertEqual(getLinesFromShellCommand (cmd)[0][0], section)
 
     def test_SHELL_section_via_env_good(self):
         " test that the SHELL API can obtain section from the environment"""
@@ -201,10 +201,10 @@ key  =     akey
 	d = serviceaccess.parse(None, self.section, "DB")
 	self.assertEqual(d['key'],'akey')
 
-    def test_C_HOME(self):
-        """test file is foudn in HOME in C librayr"""
-        cmd = '(export HOME=`pwd`; ./test_svc_parse -v -C meta_section aKey "")' 
-        self.assertEqual(getLinesFromShellCommand (cmd)[0][0],'aKey')
+#    def test_C_HOME(self):
+#        """test file is foudn in HOME in C librayr"""
+#        cmd = '(export HOME=`pwd`; ./test_svc_parse -v -C meta_section aKey "")' 
+#        self.assertEqual(getLinesFromShellCommand (cmd)[0][0],'aKey')
 
 
 
