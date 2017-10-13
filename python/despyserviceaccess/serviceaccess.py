@@ -64,8 +64,8 @@ def parse(file, section, tag=None, retry=False):
             success = True
         except IOError as exc:
             if trycnt < maxtries:
-                print "IOError: %s" % exc
-                print "Sleeping for %s seconds and retrying" % delay
+                print("IOError: %s" % exc)
+                print("Sleeping for %s seconds and retrying" % delay)
                 try:
                     # try triggering automount
                     process = subprocess.Popen(['ls', '-l', file], shell=False,
@@ -80,8 +80,8 @@ def parse(file, section, tag=None, retry=False):
     if not success:
         raise
 
-    import ConfigParser
-    c = ConfigParser.RawConfigParser()
+    import configparser
+    c = configparser.RawConfigParser()
     c.read(file)
     d = {}
     [d.__setitem__(key, value) for (key, value) in c.items(section)]
@@ -133,9 +133,9 @@ def _check_db(d):
     file = d["meta_file"]
     section = d["meta_section"]
     for key in ("user", "passwd", "type", "port", "server"):
-        if key not in d.keys():
+        if key not in list(d.keys()):
             missing.append(key)
-    for key in d.keys():
+    for key in list(d.keys()):
         if key not in expected_db_keys:
             extra.append(key)
     check(d)

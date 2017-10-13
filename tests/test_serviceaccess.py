@@ -15,7 +15,7 @@ def getLinesFromShellCommand(command):
     p.wait()
     if p.returncode != 0:
         for l in p.stderr.readlines():
-            print l.rstrip()
+            print(l.rstrip())
         sys.exit(p.returncode)
     stdout = [s.rstrip() for s in p.stdout.readlines()] #kill newlines
     stderr = [s.rstrip() for s in p.stderr.readlines()]
@@ -157,12 +157,12 @@ key  =     akey
         self.section = "db-minimal"
         open(self.filename, "w").write(self.text)
         protect_file(self.filename)
-        if os.environ.has_key("DES_DB_SECTION"):
+        if "DES_DB_SECTION" in os.environ:
             del os.environ["DES_DB_SECTION"]
         return
 
     def tearDown(self):
-        if os.environ.has_key("DES_DB_SECTION"):
+        if "DES_DB_SECTION" in os.environ:
             del os.environ["DES_DB_SECTION"]
         #os.unlink(self.filename)
         return
@@ -176,11 +176,11 @@ key  =     akey
     def test_via_env_bad(self):
         """ test that fault arises when environment names section not in teh file"""
         os.environ["DES_DB_SECTION"] = "some-non-existing section"
-        import ConfigParser
+        import configparser
         assert_fired = False
         try:
             serviceaccess.parse(self.filename, None, "db")
-        except ConfigParser.NoSectionError:
+        except configparser.NoSectionError:
             assert_fired = True
         self.assertTrue(assert_fired)
 
@@ -192,7 +192,7 @@ key  =     akey
     def test_with_no_file_HOME(self):
         """ test errors is raise if HOME in error"""
         os.environ["HOME"] = "no/file/here"
-        import ConfigParser
+        import configparser
         try:
             serviceaccess.parse(None, self.section, "db")
         except IOError:
