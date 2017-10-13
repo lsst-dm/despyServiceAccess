@@ -9,7 +9,8 @@ import subprocess
 
 
 def getLinesFromShellCommand(command):
-    "execute a shell command return stdout, stderr as two arrays of lines."
+    """Execute a shell command return stdout, stderr as two arrays of lines.
+    """
     # thow error if shell level error
     p = subprocess.Popen(command, stdin=None, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     p.wait()
@@ -23,20 +24,22 @@ def getLinesFromShellCommand(command):
 
 
 def protect_file(f):
-    """ Protect service access file according to DESDM_3"""
+    """Protect service access file according to DESDM_3.
+    """
     os.chmod(f, (0xffff & ~(stat.S_IROTH | stat.S_IWOTH | stat.S_IRGRP | stat.S_IWGRP)))
 
 
 class test_db_section2(unittest.TestCase):
-    """
-    make a file that is "complete" that is a file with...
-       ... all defaults supplied
-       ....keywords in various cases
-       ... whole line comments
-       ... whole line comments with # precesed by spaces
-       ... comments after space after values
-       ... comments glued onto values
-       ... repeated keyword (last repetition "wins"
+    """Make a complete file.
+
+    A complete file is a file with:
+    - all defaults supplied
+    - keywords in various cases
+    - whole line comments
+    - whole line comments with # precesed by spaces
+    - comments after space after values
+    - comments glued onto values
+    - repeated keyword (last repetition "wins")
     """
 
     def setUp(self):
@@ -82,7 +85,8 @@ serverr = sevrver   ; example of mis-spelled keyword
         return
 
     def test_python_maximal_keys(self):
-        """  test database with all keys specified"""
+        """Test database with all keys specified.
+        """
         self.assertEqual(self.maximal["user"], "maximal_user")
         self.assertEqual(self.maximal["passwd"], "maximal_passwd")
         self.assertEqual(self.maximal["type"], "postgres")
@@ -93,18 +97,19 @@ serverr = sevrver   ; example of mis-spelled keyword
         return
 
     def test_python_maximal_assert(self):
-        """ Test that checkign a proper file throws no errors """
+        """Test that checking a proper file throws no errors.
+        """
         serviceaccess.check(self.maximal, "db")
         return
 
     def test_python_minimal(self):
-        """ Test that a db file wit hminimal keys gives full informaion.
+        """Test that a db file with minimal keys gives full information.
 
         also various tests related to case:
-          -- fetch by key is case blind .e.g. lower case works.
-          -- all values are fetched case-preserving...
-          -- that valuse are case preserving (expect for db_type)
-          -- ... except db_type is retured stanardized to lower case.
+        - fetch by key is case blind .e.g. lower case works
+        - all values are fetched case-preserving
+        - that valuse are case preserving (expect for db_type)
+        - except db_type is returned standardized to lower case.
         """
         self.assertEqual(self.minimal["user"], "Minimal_user")
         self.assertEqual(self.minimal["passwd"], "Minimal_passwd")
@@ -113,7 +118,8 @@ serverr = sevrver   ; example of mis-spelled keyword
         self.assertEqual(self.minimal["port"], "1521")
 
 #    def test_c_good_fetch(self):
-#        """ test that a good file can be accessed from C  """
+#        """Test that a good file can be accessed from C.
+#        """
 #        cmd = "./test_svc_parse %%s %s %s" % ("db-minimal", self.filename)
 #        self.assertEqual(getLinesFromShellCommand (cmd % "user")[0][0],   "Minimal_user")
 #        self.assertEqual(getLinesFromShellCommand (cmd % "passwd")[0][0], "Minimal_passwd")
@@ -123,28 +129,30 @@ serverr = sevrver   ; example of mis-spelled keyword
 #        return
 
 #    def test_C_section_via_env_good(self):
-#        " test that the C API can obtain section from the environment"""
+#        """Test that the C API can obtain section from the environment.
+#        """
 #        section = "db-minimal"
 #        cmd = '(export DES_DB_SECTION=%s; ./test_svc_parse -C %s "" %s)' % (
 #            section, "meta_section", self.filename)
 #        self.assertEqual(getLinesFromShellCommand (cmd)[0][0], section)
 
     def test_SHELL_section_via_env_good(self):
-        " test that the SHELL API can obtain section from the environment"""
+        """Test that the SHELL API can obtain section from the environment.
+        """
         section = "db-minimal"
         cmd = '(export DES_DB_SECTION=%s; serviceAccess  -t db -f %s "%%(%s)s")' % (
             section, self.filename, "meta_section")
         self.assertEqual(getLinesFromShellCommand(cmd)[0][0], section)
 
     def test_python_minimal_assert(self):
-        """ test that check function passed a clean file"""
+        """Test that check function passed a clean file.
+        """
         serviceaccess.check(self.minimal, "db")
         return
 
 
 class TestSectionsFromEnv(unittest.TestCase):
-    """
-    test that we can find tag-specific sections from the environment.
+    """Test that we can find tag-specific sections from the environment.
     """
 
     def setUp(self):
@@ -168,13 +176,15 @@ key  =     akey
         return
 
     def test_via_env_good(self):
-        """test python gettion section form the environment"""
+        """Test python gettion section form the environment.
+        """
         os.environ["DES_DB_SECTION"] = self.section
         d = serviceaccess.parse(self.filename, None, "db")
         d = serviceaccess.parse(self.filename, "", "db")
 
     def test_via_env_bad(self):
-        """ test that fault arises when environment names section not in teh file"""
+        """Test if fault arises when environment names section not in the file.
+        """
         os.environ["DES_DB_SECTION"] = "some-non-existing section"
         import configparser
         assert_fired = False
@@ -185,12 +195,14 @@ key  =     akey
         self.assertTrue(assert_fired)
 
     def test_with_env_bad_and_filename_good(self):
-        """test that passed in fiel name trumps environment"""
+        """Test that passed in fiel name trumps environment.
+        """
         os.environ["DES_SERVICES"] = "no/file/here"
         serviceaccess.parse(self.filename, self.section, "db")
 
     def test_with_no_file_HOME(self):
-        """ test errors is raise if HOME in error"""
+        """Test errors is raise if HOME in error.
+        """
         os.environ["HOME"] = "no/file/here"
         import configparser
         try:
@@ -201,24 +213,27 @@ key  =     akey
             raise "help"
 
     def test_HOME(self):
-        """ test file in HOME area is found in python library"""
+        """Test file in HOME area is found in python library.
+        """
         os.environ["HOME"] = "./"
         d = serviceaccess.parse(None, self.section, "DB")
         self.assertEqual(d['key'], 'akey')
 
 #    def test_C_HOME(self):
-#        """test file is foudn in HOME in C librayr"""
+#        """Test file is found in HOME in C library.
+#        """
 #        cmd = '(export HOME=`pwd`; ./test_svc_parse -v -C meta_section aKey "")'
 #        self.assertEqual(getLinesFromShellCommand (cmd)[0][0],'aKey')
 
 
 class TestBadPermissions(unittest.TestCase):
-    """
-    test that we find a file (in wasy we've not tested before....
-    ... Can open when file "" but environment good
-    ... Can open when file good but environment bad
-    ... Cannot open when filename bad but env good
-    ... cnoot open when file bad and env bad
+    """Test that we find a file.
+
+    In way we've not tested before, i.e., if:
+    - can open when file "" but environment good
+    - can open when file good but environment bad
+    - cannot open when filename bad but env good
+    - cannot open when file bad and env bad
     """
 
     def setUp(self):
@@ -237,7 +252,8 @@ key  =     akey
         return
 
     def test_detect_permission(self):
-        """ test python API detect mal formed permissions """
+        """Test python API detect mal formed permissions.
+        """
         d = serviceaccess.parse(self.filename, self.section, "DB")
         try:
             serviceaccess.check(d, "db")

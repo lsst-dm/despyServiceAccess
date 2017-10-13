@@ -1,17 +1,14 @@
 #!/usr/bin/env python
-"""
-Support a service access file as described in DESDM-3
+"""Support a service access file as described in DESDM-3.
 
+The parse functions return a dictionary of keys in the specified section
+of the specified file.
 
-The parse functions return a dictionary of  keys in the specified
-seection of the specified file.
-
-If file or section is not specified, devfaults  are supplied in a tag-specific way
-as sepcified in DESDM-3.
+If file or section is not specified, devfaults  are supplied in a tag-specific
+way as sepcified in DESDM-3.
 
 Check supplies chaking of entries as specified in DESDM-3
 """
-
 import os
 import sys
 import time
@@ -19,7 +16,8 @@ import subprocess
 
 
 class ServiceaccessException(Exception):
-    "class for any file-content, + null fle name"
+    """Class for any file-content, + null fle name.
+    """
 
     def __init__(self, txt):
         Exception.__init__(self)
@@ -34,12 +32,13 @@ expected_db_keys = ("user", "passwd", "type", "port", "server", "name", "sid", "
 
 
 def parse(file, section, tag=None, retry=False):
-    """parse a serviceaccess file, return a dictionary of keys  section supplimented by defaults indicated by tag
+    """Parse a serviceaccess file.
 
-    provide two extra dictionary entries,
+    Returns a dictionary of keys section supplemented by defaults indicated
+    by tag and provide two extra dictionary entries,
          meta_file     indicating the file actually used.
-         meta_section  indicating the section actually used."""
-
+         meta_section  indicating the section actually used.
+    """
     if not file:
         file = os.getenv("DES_SERVICES")
     if not file:
@@ -94,7 +93,8 @@ def parse(file, section, tag=None, retry=False):
 
 
 def check(d, tag=None):
-    "raise execption if file or indicated keys inconsistent with DESDM-3."
+    """Raise exception if file or indicated keys inconsistent with DESDM-3.
+    """
     import os
     import stat
     permission_faults = []
@@ -114,7 +114,8 @@ def check(d, tag=None):
 
 
 def _process_db(d):
-    "suppliment db section supplimented with DB defaults."
+    """Supplement db section supplemented with DB defaults.
+    """
     d.setdefault("type", "oracle")
     d["type"] = d["type"].lower()
     d.setdefault("sid", None)
@@ -127,7 +128,8 @@ def _process_db(d):
 
 
 def _check_db(d):
-    "suppliment chack with  DB specific rules."
+    """Supplement chack with  DB specific rules.
+    """
     missing = []
     extra = []
     file = d["meta_file"]
