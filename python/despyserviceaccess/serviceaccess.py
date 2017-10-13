@@ -1,17 +1,15 @@
 #!/usr/bin/env python
 """
-Support a service access file as described in DESDM-3 
+Support a service access file as described in DESDM-3
 
 
 The parse functions return a dictionary of  keys in the specified
-seection of the specified file. 
+seection of the specified file.
 
-If file or section is not specified, devfaults  are supplied in a tag-specific way 
+If file or section is not specified, devfaults  are supplied in a tag-specific way
 as sepcified in DESDM-3.
 
 Check supplies chaking of entries as specified in DESDM-3
-
- 
 """
 
 import os
@@ -38,9 +36,9 @@ expected_db_keys = ("user", "passwd", "type", "port", "server", "name", "sid", "
 def parse(file, section, tag=None, retry=False):
     """parse a serviceaccess file, return a dictionary of keys  section supplimented by defaults indicated by tag
 
-    provide two extra dictionary entries, 
+    provide two extra dictionary entries,
          meta_file     indicating the file actually used.
-         meta_section  indicating the section actually used. """
+         meta_section  indicating the section actually used."""
 
     if not file:
         file = os.getenv("DES_SERVICES")

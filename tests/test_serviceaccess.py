@@ -42,16 +42,16 @@ class test_db_section2(unittest.TestCase):
     def setUp(self):
         self.text = """
 ;
-;  initial comments in file 
+;  initial comments in file
 ;comment line with comment marker not in column 1 not allowed
 ;
 
 [db-maximal]
-USER=maximal_user   
+USER=maximal_user
 PASSWD  =   maximal_passwd
-name    =   maximal_name_1    ; if repeated last name wins 
+name    =   maximal_name_1    ; if repeated last name wins
 name    =   maximal_name      ; if repeated key, last one wins
-Sid     =   maximal_sid       ;comment glued onto value not allowed   
+Sid     =   maximal_sid       ;comment glued onto value not allowed
 type    =   POSTgres
 server  =   maximal_server
 
