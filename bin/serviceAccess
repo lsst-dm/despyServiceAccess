@@ -31,7 +31,7 @@
 if __name__ == "__main__":
     import sys
     import despyserviceaccess.serviceaccess as serviceaccess
-    from  optparse import OptionParser
+    from optparse import OptionParser
 
     parser = OptionParser(usage=__doc__)
     parser.add_option("-f", "--file", dest="filename",
@@ -40,10 +40,9 @@ if __name__ == "__main__":
                       help="section in file to use")
     parser.add_option("-t", "--tage", dest="tag",
                       help="serviceaccess file.")
-    parser.add_option("-l", "--loose",  action="store_true", dest="loose",
+    parser.add_option("-l", "--loose", action="store_true", dest="loose",
                       help="minimal check service access file")
     (options, args) = parser.parse_args()
-
 
     if len(args) != 1 or (not options.tag and not options.section):
         print __doc__
@@ -52,6 +51,7 @@ if __name__ == "__main__":
 
     filename = options.filename
     keys = serviceaccess.parse(options.filename, options.section, options.tag)
-    if not options.loose : serviceaccess.check(keys, options.tag)
+    if not options.loose:
+        serviceaccess.check(keys, options.tag)
     print format % keys
     sys.exit(0)
