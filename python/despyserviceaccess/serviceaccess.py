@@ -78,7 +78,7 @@ def parse(file, section, tag=None, retry=False):
                 time.sleep(delay)
 
     if not success:
-        raise
+        raise IOError("Cannot read from file '%s'." % file)
 
     import configparser
     c = configparser.RawConfigParser()
