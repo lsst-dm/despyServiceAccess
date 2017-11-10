@@ -24,6 +24,7 @@ setup(name='despyServiceAccess',
       packages = ['despyserviceaccess'],
       package_dir = {'': 'python'},
       scripts = ['bin/serviceAccess'],
+      data_files=[('ups',['ups/despyServiceAccess.table'])],
       )
 
 test_services()
