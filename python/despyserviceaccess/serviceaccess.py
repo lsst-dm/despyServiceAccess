@@ -45,6 +45,8 @@ def parse(file, section, tag=None, retry=False):
         file = os.path.join(os.getenv("HOME"), ".desservices.ini")
     if not section and tag:
         section = os.getenv("DES_%s_SECTION" % tag.upper())
+    if not section:
+        raise ServiceaccessException('faulty section: %s' % section)
 
     # config parser throws "no section error" if file does not exist....
     # ... That's Confusing. so do an open to get a more understandable error.
